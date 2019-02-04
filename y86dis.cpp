@@ -7,6 +7,12 @@
 #include <sstream>
 #include <algorithm>
 
+void readInst(const char* tok)
+{
+   char firstByte = tok[1];
+   std::cout << firstByte << "\n";
+}
+
 void diss(std::ifstream &r)
 {
     std::string line;
@@ -27,7 +33,18 @@ void diss(std::ifstream &r)
             {
                 tok = tok.substr(1, tok.length());
             }
-            std::cout << tok << "\n";
+
+            if (tok.at(1) == 'x' || tok.at(1) == 'X')
+            {
+                std::cout << tok << ": ";
+            }
+
+            else
+            {
+                readInst(tok.c_str());
+            }
+            
+            //std::cout << tok << "\n";
             lineNum++;
         }
         //std::string tok1 = line.substr(0, linePos);    
