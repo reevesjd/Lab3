@@ -61,7 +61,7 @@ void getRegister(int a)
         case 15:    std::cout << "ERROR, REGISTER NOT USED\n";
                     break;
 
-        default:    std::cout << "ERROR\n";
+        default:    std::cout << "REG ERROR\n";
                     break;
     }
 
