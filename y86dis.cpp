@@ -6,62 +6,144 @@
 #include <string>
 #include <sstream>
 #include <algorithm>
+#include <bits/stdc++.h>
+
+void flipEndOther(char *tok)
+{
+   for (int i = 0, j = 15; i < 8; i = i + 2, j = j - 2)
+    {
+        char temp = tok[i];
+        tok[i] = tok[j - 1];
+        tok[j - 1] = temp;
+        temp = tok[i + 1];
+        tok[i + 1] = tok[j];
+        tok[j] = temp;
+    }
+
+    int k = 0;
+    while (tok[k] == '0')
+    {
+        k++;
+    }
+
+    if (k == 16)
+    {
+        std::cout << "0x0";
+    }
+    
+    else
+    {
+        std::cout << "0x";
+        for (; k < 16; k++)
+        {
+            std::cout << tok[k];
+        }
+    }
+}
+
+void flipEndQuad(char *tok)
+{
+    /*char arr [16];
+    arr[16] = '\0';
+    for (int i = 0; i < 16; i++)
+    {
+        arr[i] = tok[i];
+    }*/
+
+    /*for (int i = 0, j = 15; i < 8; i = i + 2, j = j - 2)
+    {
+        char temp = arr[i];
+        arr[i] = arr[j - 1];
+        arr[j - 1] = temp;
+        temp = arr[i + 1];
+        arr[i + 1] = arr[j];
+        arr[j] = temp;
+    }*/
+
+    for (int i = 0, j = 15; i < 8; i = i + 2, j = j - 2)
+    {
+        char temp = tok[i];
+        tok[i] = tok[j - 1];
+        tok[j - 1] = temp;
+        temp = tok[i + 1];
+        tok[i + 1] = tok[j];
+        tok[j] = temp;
+    }
+}
 
 //Add spaces or commas?
-void getRegister(int a)
+void getRegister(char a)
 {
     std::string regOut;
     switch (a)
     {
-        case 0: regOut = "%rax";
+        case '0': regOut = "%rax";
                 break;
 
-        case 1: regOut = "%rcx";
+        case '1': regOut = "%rcx";
                 break;
 
-        case 2: regOut = "%rdx";
+        case '2': regOut = "%rdx";
                 break;
 
-        case 3: regOut = "%rbx";
+        case '3': regOut = "%rbx";
                 break;
 
-        case 4: regOut = "%rsp";
+        case '4': regOut = "%rsp";
                 break;
 
-        case 5: regOut = "%rbp";
+        case '5': regOut = "%rbp";
                 break;
 
-        case 6: regOut = "%rsi";
+        case '6': regOut = "%rsi";
                 break;
 
-        case 7: regOut = "%rdi";
+        case '7': regOut = "%rdi";
                 break;
 
-        case 8: regOut = "%r8";
+        case '8': regOut = "%r8";
                 break;
 
-        case 9: regOut = "%r9";
+        case '9': regOut = "%r9";
                 break;
 
-        case 10:regOut = "%r10";
+        case 'a':regOut = "%r10";
                 break;
 
-        case 11:regOut = "%r11";
+        case 'A':regOut = "%r10";
                 break;
 
-        case 12:regOut = "%r12";
+        case 'b':regOut = "%r11";
                 break;
 
-        case 13:regOut = "%r13";
+        case 'B':regOut = "%r11";
                 break;
 
-        case 14:regOut = "%r14";
+        case 'c':regOut = "%r12";
+                break;
+
+        case 'C':regOut = "%r12";
+                break;
+
+        case 'd':regOut = "%r13";
+                break;
+
+        case 'D':regOut = "%r13";
+                break;
+
+        case 'e':regOut = "%r14";
+                break;
+
+        case 'E':regOut = "%r14";
                 break;
         
-        case 15:    std::cout << "ERROR, REGISTER NOT USED\n";
-                    break;
+        case 'f':std::cout << "ERROR, REGISTER NOT USED\n";
+                break;
 
-        default:    std::cout << "REG ERROR\n";
+        case 'F':std::cout << "ERROR, REGISTER NOT USED\n";
+                break;
+
+        default:    std::cout << "REG ERROR";
                     break;
     }
 
@@ -70,21 +152,23 @@ void getRegister(int a)
 
 void checkRegisters(char a, char b)
 {
-    if (a != NULL && b != NULL)
+    if (a != 0 && b != 0)
     {
-
+        getRegister(b);
+        std::cout << ", ";
+        getRegister(a);
     }
 
-    else if (a != NULL && b == NULL)
+    else if (a != 0 && b == 0)
     {
-        
+        getRegister(a);
     }
 
-    else if (a == NULL && b != NULL)
+    else if (a == 0 && b != 0)
     {
         //Doesn't need to output F, just placeholder
-        std::cout << "F";
-        getRegister(b - '0');
+        //std::cout << "F";
+        getRegister(b);
     }
 
     else 
@@ -92,7 +176,8 @@ void checkRegisters(char a, char b)
         std::cout<< "ERROR\n";
     }
 }
-void oneByte(const char* tok)
+
+void oneByte(/*const*/ char* tok)
 {
     std::string instOut;
     if (tok[0] == '0' && tok[1] == '0')
@@ -112,81 +197,92 @@ void oneByte(const char* tok)
 
     else
     {
-        instOut = "ERROR\n";
+        instOut = "illegalop\n";
     }
 
     std::cout << instOut;
 }
 
-void twoBytes(const char* tok)
+void twoBytes(/*const*/ char* tok)
 {
     std::string instOut;
     if (tok[0] == '2')
     {
         switch (tok[1])
         {
-            case '0':   instOut = "rrmovq\n";
+            case '0':   instOut = "rrmovq";
                         break;
 
-            case '1':   instOut = "cmovle\n";
+            case '1':   instOut = "cmovle";
                         break;
 
-            case '2':   instOut = "cmovl\n";
+            case '2':   instOut = "cmovl";
                         break;
 
-            case '3':   instOut = "cmove\n";
+            case '3':   instOut = "cmove";
                         break;
 
-            case '4':   instOut = "cmovne\n";
+            case '4':   instOut = "cmovne";
                         break;
 
-            case '5':   instOut = "cmovge\n";
+            case '5':   instOut = "cmovge";
                         break;
 
-            case '6':   instOut = "cmovg\n";
+            case '6':   instOut = "cmovg";
                         break;
 
-            default:    std::cout << "ERROR";
+            default:    std::cout << "illegalop";
                         break;
         }
+        std::cout << instOut << " ";
+        checkRegisters(tok[3], tok[2]);
+        //std::cout << "\n";
     }
 
     else if (tok[0] == '6')
     {
         switch (tok[1])
         {
-            case '0':   instOut = "addq\n";
+            case '0':   instOut = "addq ";
                         break;
 
-            case '1':   instOut = "subq\n";
+            case '1':   instOut = "subq ";
                         break;
 
-            case '2':   instOut = "andq\n";
+            case '2':   instOut = "andq ";
                         break;
 
-            case '3':   instOut = "xorq\n";
+            case '3':   instOut = "xorq ";
                         break;
 
-            default:    std::cout << "ERROR";
+            default:    std::cout << "illegalop";
                         break;
         }
+        std::cout << instOut << " ";
+        checkRegisters(tok[3], tok[2]);
+        //std::cout << "\n";
     }
 
-    else if ((tok[0] == 'A' || tok[0] == 'a') && tok[1] == 0)
+    else if ((tok[0] == 'A' || tok[0] == 'a') && tok[1] == '0')
     {
-        instOut = "pushq\n";
+        std::cout << "pushq ";
+        checkRegisters(tok[2], 0);
+        //std::cout << "\n";
     }
 
-    else if ((tok[0] == 'B' || tok[0] == 'b') && tok[1] == 0)
+    else if ((tok[0] == 'B' || tok[0] == 'b') && tok[1] == '0')
     {
-        instOut = "popq\n";
+        std::cout << "popq ";
+        checkRegisters(tok[2], 0);
+        //std::cout << "\n";
     }
 
     else
     {
-        std::cout << "ERROR\n";
+        std::cout << "illegalop";
     }
-    std::cout << instOut;
+    //std::cout << instOut;
+    std::cout << "\n";
 }
 
 void fourBytes(const char* tok)
@@ -194,86 +290,145 @@ void fourBytes(const char* tok)
     //Is this even used?    
 }
 
-void eightBytes(const char* tok)
+void eightBytes(/*const*/ char* tok)
 {
-    std::string instOut = ".quad\n";
-    std::cout << instOut;
+    std::string instOut = ".quad ";
+    char arr [16];
+    arr[16] = '\0';
+    for (int i = 0; i < 16; i++)
+    {
+        arr[i] = tok[i];
+    }
+    flipEndQuad(arr);
+
+    /*for (int i = 0, j = 15; i < 8; i = i + 2, j = j - 2)
+    {
+        char temp = arr[i];
+        arr[i] = arr[j - 1];
+        arr[j - 1] = temp;
+        temp = arr[i + 1];
+        arr[i + 1] = arr[j];
+        arr[j] = temp;
+    }*/
+    std::cout << ".quad 0x";
+    std::cout << arr << "\n";
+    /*std::stringstream inte;
+    inte << tok;
+    int swap;
+    inte >> swap;
+    std::cout << "Before swap: " << std::hex << swap;
+    swap = __builtin_bswap64(swap);
+    std::cout << "After: " << std::hex << swap;*/
+    //std::cout << instOut << "\n";
+
+    //std::cout << instOut << std::hex << swap << "\n";
 }
 
-void nineBytes(const char* tok)
+void nineBytes(/*const*/ char* tok)
 {
+    char arr [17];
+    arr[16] = '\0';
+    for (int i = 0, j = 2; i < 16; i++, j++)
+    {
+        arr[i] = tok[j];
+    }
     std::string instOut;
     if (tok[0] == '7')
     {
         switch (tok[1])
         {
-            case '0':   instOut = "jmp\n";
+            case '0':   instOut = "jmp";
                         break;
 
-            case '1':   instOut = "jle\n";
+            case '1':   instOut = "jle";
                         break;
             
-            case '2':   instOut = "jl\n";
+            case '2':   instOut = "jl";
                         break;
 
-            case '3':   instOut = "je\n";
+            case '3':   instOut = "je";
                         break;
 
-            case '4':   instOut = "jne\n";
+            case '4':   instOut = "jne";
                         break;
 
-            case '5':   instOut = "jge\n";
+            case '5':   instOut = "jge";
                         break;
 
-            case '6':   instOut = "jg\n";
+            case '6':   instOut = "jg";
                         break;
 
-            default:    std::cout << "ERROR\n";
+            default:    std::cout << "illegalop\n";
                         break;
         }
+        std::cout << instOut << " ";
+        flipEndOther(arr);
+        std::cout << "\n";
     }
     
     else if (tok[0] == '8' && tok[1] == '0')
     {
-        instOut = "call\n";
+        //instOut = "call\n";
+        std::cout << "call ";
+        flipEndOther(arr);
+        std::cout << "\n";
     }
 
     else 
     {
-        std::cout << "ERROR\n";
+        std::cout << "illegalop\n";
     }
 
-    std::cout << instOut;
+    //d::cout << instOut;
 }
 
-void tenBytes(const char* tok)
+void tenBytes(/*const*/ char* tok)
 {
     std::string instOut;
+    char arr [17];
+    arr[16] = '\0';
+    for (int i = 0, j = 4; i < 16; i++, j++)
+    {
+        arr[i] = tok[j];
+    }
     if (tok[0] == '3' && tok[1] == '0')
     {
-        instOut = "irmovq\n";
-        checkRegisters(NULL, tok[3]);
+        std::cout << "irmovq $";
+        flipEndOther(arr);
+        std::cout << ", ";
+        checkRegisters(0, tok[3]);
     }
 
     else if (tok[0] == '4' && tok[1] == '0')
     {
-        instOut = "rmmovq\n";
+        std::cout << "rmmovq ";
+        checkRegisters(tok[2], 0);
+        std::cout << ", $";
+        flipEndOther(arr);
+        std::cout << " (";
+        checkRegisters(0, tok[3]);
+        std::cout << ")";
     }
 
     else if (tok[0] == '5' && tok[1] == '0')
     {
-        instOut = "mrmovq\n";
+        std::cout << "mrmovq $";
+        flipEndOther(arr);
+        std::cout << " (";
+        checkRegisters(0, tok[3]);
+        std::cout << "), ";
+        checkRegisters(tok[2], 0);
     }
 
     else
     {
-        std::cout << "ERROR\n";
+        std::cout << "illegalop";
     }
-
-    std::cout << instOut;
+    //std::cout << instOut;
+    std::cout << "\n";    
 }
 
-void readInst(const char* tok, int length)
+void readInst(/*const*/ char* tok, int length)
 {
     int bytes = 0;
     for (int i = 0; i < length; i++)
@@ -336,12 +491,15 @@ void diss(std::ifstream &r)
 
             if (tok.at(1) == 'x' || tok.at(1) == 'X')
             {
-                std::cout << tok << ": ";
+                std::cout << tok << ":    ";
             }
 
             else
             {
-                readInst(tok.c_str(), tok.length());
+                char char_array [tok.length()];
+                std::strcpy(char_array, tok.c_str());
+                readInst(char_array, tok.length());
+                //readInst(tok.c_str(), tok.length());
             }
             
             //std::cout << tok << "\n";
