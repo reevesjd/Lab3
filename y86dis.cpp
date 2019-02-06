@@ -5,22 +5,13 @@
  * Date: 2/6/2019
  */
 
-
-#include <cstdlib>
-#include <cstdio>
-#include <fstream>
-#include <iostream>
-#include <iomanip>
-#include <string>
-#include <sstream>
-#include <algorithm>
 #include <bits/stdc++.h>
 
 //Flips the endianness of passed addresses or destinations
 void flipEndOther(char *tok)
 {
    for (int i = 0, j = 15; i < 8; i = i + 2, j = j - 2)     //i tracks the lower bytes, j tracks the upper
-    {
+    {                                                       //Loop swaps bytes
         char temp = tok[i];
         tok[i] = tok[j - 1];
         tok[j - 1] = temp;
@@ -54,7 +45,7 @@ void flipEndOther(char *tok)
 void flipEndQuad(char *tok)
 {
     for (int i = 0, j = 15; i < 8; i = i + 2, j = j - 2)    //i tracks the lower bytes, j tracks the upper
-    {
+    {                                                       //Loop swaps bytes
         char temp = tok[i];
         tok[i] = tok[j - 1];
         tok[j - 1] = temp;
